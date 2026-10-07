@@ -7,7 +7,7 @@ namespace Tipi\Localization\Filament;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\View\PanelsRenderHook;
-use Illuminate\Support\Facades\Blade;
+use Illuminate\Contracts\View\View;
 use Tipi\Localization\Config\LocalizationConfig;
 use Tipi\Localization\Enums\LocaleDriver;
 use Tipi\Localization\Filament\Resources\Locales\LocaleResource;
@@ -35,7 +35,6 @@ final class FilamentLocalizationPlugin implements Plugin
         $this->showFlags = $show;
 
         return $this;
-
     }
 
     public function renderHook(string $hook): static
@@ -54,10 +53,8 @@ final class FilamentLocalizationPlugin implements Plugin
 
         $panel->renderHook(
             name: $this->renderHook,
-            hook: fn (): string => Blade::render(
-                '<livewire:tipi-filament-localization-locale-switcher
-                 :show-flags="$showFlags"
-                 />',
+            hook: fn (): View => view(
+                'tipi-filament-localization::locale-switcher',
                 [
                     'showFlags' => $this->showFlags,
                 ],
