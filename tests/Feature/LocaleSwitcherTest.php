@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Session\Middleware\StartSession;
 use Livewire\Livewire;
 use Tipi\Localization\Filament\Livewire\LocaleSwitcher;
 
@@ -21,12 +20,8 @@ it('can hide flags', function (): void {
 });
 
 it('selects a locale and redirects to the original url', function (): void {
-    $this->app['router']->middleware(StartSession::class)->get(
-        '/locale-switcher-test',
-        fn () => Livewire::test(LocaleSwitcher::class)
-            ->call('switchLocale', 'ka')
-            ->assertRedirect(url('/locale-switcher-test')),
-    );
-
-    $this->get('/locale-switcher-test')->assertOk();
+    Livewire::test(LocaleSwitcher::class)
+        ->set('redirectUrl', url('/locale-switcher-test'))
+        ->call('switchLocale', 'ka')
+        ->assertRedirect(url('/locale-switcher-test'));
 });

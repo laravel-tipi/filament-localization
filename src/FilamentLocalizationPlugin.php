@@ -22,7 +22,7 @@ final class FilamentLocalizationPlugin implements Plugin
 
     public static function make(): static
     {
-        return app(static::class);
+        return app(self::class);
     }
 
     public function getId(): string
