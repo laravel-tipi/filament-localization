@@ -1,0 +1,68 @@
+{
+  "name": "laravel-tipi/filament-localization",
+  "description": "Filament integration for laravel-tipi/localization",
+  "keywords": [
+    "laravel",
+    "filament",
+    "translations",
+    "localization",
+    "i18n"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Irakli",
+      "email": "iraklikevkhishvili@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.5",
+    "filament/filament": "^5.10",
+    "laravel-tipi/support": "^1.0",
+    "laravel-tipi/localization": "^0.1",
+    "stijnvanouplines/blade-country-flags": "^1.0.9"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.32",
+    "orchestra/testbench": "^11.3",
+    "pestphp/pest": "^5.3",
+    "pestphp/pest-plugin-laravel": "^5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tipi\\Localization\\Filament\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tipi\\Localization\\Filament\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Tipi\\Localization\\Filament\\FilamentLocalizationServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "pest",
+    "format": "pint",
+    "format:test": "pint --test",
+    "check": [
+      "@format:test",
+      "@test"
+    ]
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "support": {
+    "issues": "https://github.com/laravel-tipi/filament-localization/issues",
+    "source": "https://github.com/laravel-tipi/filament-localization"
+  }
+}
