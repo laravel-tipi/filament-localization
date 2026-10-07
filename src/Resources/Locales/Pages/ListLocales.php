@@ -22,13 +22,13 @@ final class ListLocales extends ListRecords
     }
 
     public function getTabs(): array
-{
-    return [
-        'all' => Tab::make(),
-        'active' => Tab::make()
-            ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', true)),
-        'inactive' => Tab::make()
-            ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', false)),
-    ];
-}
+    {
+        return [
+            'all' => Tab::make(),
+            'active' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', true)),
+            'inactive' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', false)),
+        ];
+    }
 }
