@@ -12,18 +12,12 @@ final class LocaleSwitcher extends Component
 {
     public bool $showFlags = true;
 
-    public string $redirectUrl;
-
-    public function mount(): void
-    {
-        $this->redirectUrl = url()->current();
-    }
-
     public function switchLocale(string $code): void
     {
         Localization::selectLocale($code);
 
-        $this->redirect($this->redirectUrl);
+        // Reload the browser's current URL, including its query string and fragment.
+        $this->js('window.location.reload()');
     }
 
     public function render(): View
