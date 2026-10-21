@@ -38,6 +38,9 @@ final class LocaleForm
                         ->label('Native name')
                         ->required(),
 
+                    TextInput::make('native_abbreviation')
+                        ->label('Native abbreviation'),
+
                     TextInput::make('country_code')
                         ->label('Country code'),
                 ]),

@@ -23,6 +23,8 @@ final class LocalesTable
                     ->searchable(),
                 TextColumn::make('native_name')
                     ->searchable(),
+                TextColumn::make('native_abbreviation')
+                    ->searchable(),
                 TextColumn::make('code')
                     ->searchable(),
                 TextColumn::make('country_code')
