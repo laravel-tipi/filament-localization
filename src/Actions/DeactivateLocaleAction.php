@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Tipi\Localization\Filament\Actions;
 
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
+use Filament\Support\Icons\Heroicon;
 use Tipi\Localization\Actions\DeactivateLocale;
+use Tipi\Localization\Filament\Support\LocalizationOperation;
 use Tipi\Localization\Models\Locale;
 
 final class DeactivateLocaleAction extends Action
@@ -21,21 +22,16 @@ final class DeactivateLocaleAction extends Action
         parent::setUp();
 
         $this
-            ->label('Deactivate')
+            ->label(__('tipi-filament-localization::locales.actions.deactivate.label'))
+            ->successNotificationTitle(__('tipi-filament-localization::locales.actions.deactivate.success'))
             ->color('danger')
+            ->icon(Heroicon::OutlinedNoSymbol)
             ->authorize('deactivate')
-            ->visible(
-                fn (Locale $record): bool => $record->canBeDeactivated(),
-            )
-            ->action(function (Locale $record): void {
-                resolve(DeactivateLocale::class)->execute(
-                    code: $record->getKey(),
-                );
-
-                Notification::make()
-                    ->title('Locale deactivated')
-                    ->success()
-                    ->send();
-            });
+            ->visible(fn (Locale $record): bool => $record->canBeDeactivated())
+            ->requiresConfirmation()
+            ->action(fn (Locale $record) => LocalizationOperation::run(
+                $this,
+                fn () => resolve(DeactivateLocale::class)->execute($record->code),
+            ));
     }
 }

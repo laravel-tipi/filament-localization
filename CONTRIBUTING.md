@@ -22,4 +22,4 @@ Format the code when needed:
 composer format
 ```
 
-Please include tests for behavior changes and keep changes focused on the Filament integration. Locale domain behavior belongs in `laravel-tipi/localization`.
+Please include tests for behavior changes and keep changes focused on the Filament integration. Locale domain behavior (resolution, negotiation, preferences, invariants) belongs in `laravel-tipi/localization`; this package wires it into Filament.

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Tipi\Localization\Filament\Actions;
 
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
+use Filament\Support\Icons\Heroicon;
 use Tipi\Localization\Actions\MakeLocaleDefault;
+use Tipi\Localization\Filament\Support\LocalizationOperation;
 use Tipi\Localization\Models\Locale;
 
 final class MakeLocaleDefaultAction extends Action
@@ -21,21 +22,16 @@ final class MakeLocaleDefaultAction extends Action
         parent::setUp();
 
         $this
-            ->label('Make default')
+            ->label(__('tipi-filament-localization::locales.actions.make_default.label'))
+            ->successNotificationTitle(__('tipi-filament-localization::locales.actions.make_default.success'))
             ->color('primary')
+            ->icon(Heroicon::OutlinedStar)
             ->authorize('makeDefault')
-            ->visible(
-                fn (Locale $record): bool => $record->canBeMadeDefault(),
-            )
-            ->action(function (Locale $record): void {
-                resolve(MakeLocaleDefault::class)->execute(
-                    code: $record->getKey(),
-                );
-
-                Notification::make()
-                    ->title('Default locale updated')
-                    ->success()
-                    ->send();
-            });
+            ->visible(fn (Locale $record): bool => $record->canBeMadeDefault())
+            ->requiresConfirmation()
+            ->action(fn (Locale $record) => LocalizationOperation::run(
+                $this,
+                fn () => resolve(MakeLocaleDefault::class)->execute($record->code),
+            ));
     }
 }

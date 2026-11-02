@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Tipi\Localization\Filament\Actions;
 
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Tipi\Localization\Actions\CreateLocale;
 use Tipi\Localization\Data\CreateLocaleData;
 use Tipi\Localization\Filament\Resources\Locales\LocaleResource;
 use Tipi\Localization\Filament\Resources\Locales\Schemas\LocaleForm;
-use Tipi\Localization\Rules\LocaleRules;
-use Tipi\Support\Validation\Validator;
+use Tipi\Localization\Filament\Support\LocalizationOperation;
 
 final class CreateLocaleAction extends Action
 {
@@ -26,27 +24,15 @@ final class CreateLocaleAction extends Action
         parent::setUp();
 
         $this
-            ->label('Create locale')
-            ->color('primary')
-            ->authorize('create', LocaleResource::getModel())
+            ->label(__('tipi-filament-localization::locales.actions.create.label'))
+            ->modalHeading(__('tipi-filament-localization::locales.actions.create.label'))
+            ->successNotificationTitle(__('tipi-filament-localization::locales.actions.create.success'))
             ->icon(Heroicon::OutlinedPlus)
-            ->schema(LocaleForm::schema())
-            ->action(function (array $data): void {
-                $validated = Validator::validate(
-                    data: $data,
-                    rules: LocaleRules::create(),
-                    attributes: LocaleRules::attributes(),
-                    path: 'mountedActions.0.data',
-                );
-
-                resolve(CreateLocale::class)->execute(
-                    CreateLocaleData::fromArray($validated),
-                );
-
-                Notification::make()
-                    ->title('Locale created')
-                    ->success()
-                    ->send();
-            });
+            ->authorize('create', LocaleResource::getModel())
+            ->schema(LocaleForm::create())
+            ->action(fn (array $data) => LocalizationOperation::run(
+                $this,
+                fn () => resolve(CreateLocale::class)->execute(CreateLocaleData::fromArray($data)),
+            ));
     }
 }

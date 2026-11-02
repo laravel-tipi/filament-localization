@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Tipi\Localization\Filament\Actions;
 
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
+use Filament\Support\Icons\Heroicon;
 use Tipi\Localization\Actions\ActivateLocale;
+use Tipi\Localization\Filament\Support\LocalizationOperation;
 use Tipi\Localization\Models\Locale;
 
 final class ActivateLocaleAction extends Action
@@ -21,21 +22,15 @@ final class ActivateLocaleAction extends Action
         parent::setUp();
 
         $this
-            ->label('Activate')
+            ->label(__('tipi-filament-localization::locales.actions.activate.label'))
+            ->successNotificationTitle(__('tipi-filament-localization::locales.actions.activate.success'))
             ->color('primary')
+            ->icon(Heroicon::OutlinedCheckCircle)
             ->authorize('activate')
-            ->visible(
-                fn (Locale $record): bool => $record->canBeActivated(),
-            )
-            ->action(function (Locale $record): void {
-                resolve(ActivateLocale::class)->execute(
-                    code: $record->getKey(),
-                );
-
-                Notification::make()
-                    ->title('Locale activated')
-                    ->success()
-                    ->send();
-            });
+            ->visible(fn (Locale $record): bool => $record->canBeActivated())
+            ->action(fn (Locale $record) => LocalizationOperation::run(
+                $this,
+                fn () => resolve(ActivateLocale::class)->execute($record->code),
+            ));
     }
 }
