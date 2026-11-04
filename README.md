@@ -12,7 +12,7 @@ Locale resolution, negotiation, preferences, validation and invariants all live 
 
 - PHP 8.5+
 - Laravel 13
-- Filament 5.10.1+
+- Filament 5.10+
 - `laravel-tipi/localization` 0.2+
 
 ## Installation
