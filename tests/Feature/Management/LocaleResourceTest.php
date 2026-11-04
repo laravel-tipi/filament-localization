@@ -208,19 +208,24 @@ describe('state actions', function (): void {
         $this->actingAs($this->user(canManageLocalization: true));
     });
 
-    it('shows only the actions that apply to a locale', function (): void {
+    // One page per locale: Filament caches an action's visibility by the
+    // record's object id, which PHP reuses once a record is freed, so on a
+    // page kept across assertions a locale can get another's answer.
+    it('shows only the actions that apply to a locale', function (string $code, array $visible): void {
         resolve(DeactivateLocale::class)->execute('ru');
 
-        Livewire::test(ListLocales::class)
-            ->assertActionHidden(TestAction::make('make_locale_default')->table(locale('en')))
-            ->assertActionHidden(TestAction::make('deactivate_locale')->table(locale('en')))
-            ->assertActionHidden(TestAction::make('delete_locale')->table(locale('en')))
-            ->assertActionVisible(TestAction::make('make_locale_default')->table(locale('ka')))
-            ->assertActionVisible(TestAction::make('deactivate_locale')->table(locale('ka')))
-            ->assertActionHidden(TestAction::make('activate_locale')->table(locale('ka')))
-            ->assertActionVisible(TestAction::make('activate_locale')->table(locale('ru')))
-            ->assertActionVisible(TestAction::make('delete_locale')->table(locale('ru')));
-    });
+        $page = Livewire::test(ListLocales::class);
+
+        foreach (['make_locale_default', 'activate_locale', 'deactivate_locale', 'delete_locale'] as $action) {
+            in_array($action, $visible, true)
+                ? $page->assertActionVisible(TestAction::make($action)->table(locale($code)))
+                : $page->assertActionHidden(TestAction::make($action)->table(locale($code)));
+        }
+    })->with([
+        'the default locale' => ['en', []],
+        'an active locale' => ['ka', ['make_locale_default', 'deactivate_locale']],
+        'an inactive locale' => ['ru', ['activate_locale', 'delete_locale']],
+    ]);
 
     it('activates, deactivates and deletes locales', function (): void {
         $page = Livewire::test(ListLocales::class)

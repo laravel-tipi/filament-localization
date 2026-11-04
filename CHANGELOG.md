@@ -2,7 +2,7 @@
 
 ## Unreleased (0.2.0)
 
-Requires `laravel-tipi/localization` ^0.2. See [UPGRADE.md](UPGRADE.md).
+Requires `laravel-tipi/localization` ^0.2 and `laravel-tipi/support` ^1.0.12. It has no upgrade path from 0.1: install it as a new package.
 
 ### Added
 - `FilamentLocalizationPlugin::context()`: each panel runs in a locale context (core `UseLocaleContext`), on full page loads and Livewire requests.

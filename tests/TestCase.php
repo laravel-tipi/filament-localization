@@ -48,7 +48,6 @@ abstract class TestCase extends Orchestra
             BladeHeroiconsServiceProvider::class,
             BladeIconsServiceProvider::class,
             BladeCountryFlagsServiceProvider::class,
-            LivewireServiceProvider::class,
             SupportServiceProvider::class,
             ActionsServiceProvider::class,
             FormsServiceProvider::class,
@@ -58,6 +57,10 @@ abstract class TestCase extends Orchestra
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             FilamentServiceProvider::class,
+            // After Filament, as package discovery orders them in an app:
+            // Livewire wires up the component hooks registered before it
+            // boots, Filament's partial rendering among them.
+            LivewireServiceProvider::class,
             LocalizationServiceProvider::class,
             FilamentLocalizationServiceProvider::class,
             AdminPanelProvider::class,
