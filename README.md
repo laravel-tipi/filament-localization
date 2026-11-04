@@ -152,10 +152,6 @@ php artisan vendor:publish --tag=tipi-filament-localization-views
 - **Livewire requests.** Livewire re-runs "persistent" middleware for component updates, but compares them by class name without parameters. The plugin therefore registers the bare `UseLocaleContext` class as persistent, so `UseLocaleContext:admin` runs again for every Livewire request on the panel.
 - **No session state.** Preferences are cookies managed by the core package, so they survive login and logout. They are per browser, not per user.
 
-## Upgrading
-
-See [UPGRADE.md](UPGRADE.md).
-
 ## Testing
 
 ```bash
